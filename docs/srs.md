@@ -141,9 +141,11 @@ Quản lý chất lượng dữ liệu khách hàng: hệ thống phát hiện h
 
 ### 5.2. Use Case Diagram
 
-![Use Case Diagram](usecase.png)
+### 5.2. Use Case Diagram
 
-*Hình 5.1 – Use Case Diagram của luồng L7.* File gốc: `docs/usecase.drawio`.
+![Use Case Diagram](./usecase.png)
+
+*Hình 5.1 – Use Case Diagram của luồng L7.*
 
 ### 5.3. Đặc tả chi tiết UC1 – Chạy pipeline làm sạch hồ sơ khách hàng
 
