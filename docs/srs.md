@@ -90,40 +90,26 @@ Quản lý chất lượng dữ liệu khách hàng: hệ thống phát hiện h
 | FR8    | Quản lý cửa hàng xác nhận gộp một nhóm nghi trùng: hệ thống giữ một hồ sơ chính, đánh dấu hồ sơ phụ ngừng sử dụng và ghi merged_into_id. Hồ sơ phụ không bị xóa vật lý, nên lịch sử của khách hàng vẫn truy ra được qua hồ sơ chính.                                                         | US6      | MUST       |
 | FR9    | Mỗi lần gộp được ghi vào lịch sử gộp (người gộp, thời điểm, hồ sơ phụ, hồ sơ chính) và hiển thị trên dashboard.                                                                                                                                                                                      | US7      | COULD      |
 
-### 3.3. Tiêu chí chấp nhận Given–When–Then cho story MUST
 
-*Dấu ⚠ đánh dấu trường hợp ngoại lệ.*
 
-<table>
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 89%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th><strong>Story</strong></th>
-<th><strong>Tiêu chí chấp nhận</strong></th>
-</tr>
-<tr class="odd">
-<th>US1</th>
-<th><p>1. Given hồ sơ thô có số điện thoại “+84 901 234 567”, “84901234567” hoặc “0901.234.567”, When chạy pipeline, Then số điện thoại trong hồ sơ sạch là “0901234567”.</p>
-<p>2. ⚠ Given số điện thoại trống hoặc sau chuẩn hóa không đủ 10 chữ số, When chạy pipeline, Then hồ sơ vào bản ghi bị loại kèm mã lý do và không vào hồ sơ sạch.</p></th>
-</tr>
-<tr class="header">
-<th>US5</th>
-<th><p>1. Given có nhóm nghi trùng ở cửa hàng A và cửa hàng B, When Quản lý cửa hàng A mở danh sách, Then chỉ thấy các nhóm của cửa hàng A.</p>
-<p>2. ⚠ Given cửa hàng không có nhóm nghi trùng nào, When mở danh sách, Then hiển thị “Không có hồ sơ nghi trùng” thay vì lỗi.</p></th>
-</tr>
-<tr class="odd">
-<th>US6</th>
-<th><p>1. Given một nhóm nghi trùng đang chờ xác nhận, When Quản lý cửa hàng bấm “Xác nhận gộp”, Then hồ sơ phụ ngừng sử dụng, merged_into_id trỏ về hồ sơ chính và hồ sơ chính còn nguyên.</p>
-<p>2. Given đã gộp xong, When kiểm tra bảng hồ sơ sạch, Then hồ sơ phụ vẫn còn trong bảng (không xóa vật lý).</p>
-<p>3. ⚠ Given hồ sơ phụ đã bị gộp bởi thao tác khác, When bấm “Xác nhận gộp”, Then hệ thống báo xung đột và không gộp.</p></th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
+### 3.3. Tiêu chí chấp nhận (Given–When–Then) cho story MUST
+
+**US1 – Chuẩn hóa số điện thoại khách hàng**
+
+- **AC1.1** – Given ba hồ sơ thô có số điện thoại lần lượt "+84 901 234 567", "84912345678" và "0923.456.789", When chạy pipeline, Then số điện thoại trong hồ sơ sạch lần lượt là "0901234567", "0912345678" và "0923456789" (QT-02).
+- **AC1.2** *(ngoại lệ)* – Given hồ sơ thô có số điện thoại trống hoặc sau chuẩn hóa không đủ 10 chữ số (ví dụ "090123"), When chạy pipeline, Then hồ sơ vào bản ghi bị loại với mã lý do PHONE_MISSING hoặc PHONE_INVALID và không vào hồ sơ sạch.
+
+**US5 – Xem danh sách hồ sơ nghi trùng**
+
+- **AC5.1** – Given cửa hàng A có 3 nhóm nghi trùng đang chờ xác nhận và cửa hàng B có 2 nhóm, When Quản lý cửa hàng A mở danh sách, Then hệ thống chỉ hiển thị 3 nhóm của cửa hàng A, nhóm mới nhất ở trên cùng (QT-14).
+- **AC5.2** *(ngoại lệ)* – Given cửa hàng A không có nhóm nghi trùng nào, When Quản lý cửa hàng A mở danh sách, Then hệ thống hiển thị "Không có hồ sơ nghi trùng" thay vì báo lỗi.
+- **AC5.3** *(ngoại lệ)* – Given Quản lý cửa hàng A, When yêu cầu xem nhóm nghi trùng của cửa hàng B, Then hệ thống từ chối (QT-14) và không trả về dữ liệu.
+
+**US6 – Xác nhận gộp hồ sơ nghi trùng**
+
+- **AC6.1** – Given một nhóm nghi trùng đang chờ xác nhận gồm hồ sơ chính X và hồ sơ phụ Y, When Quản lý cửa hàng bấm "Xác nhận gộp", Then Y ngừng sử dụng và có merged_into_id trỏ về X, X giữ nguyên, nhóm chuyển sang CONFIRMED, và lịch sử gộp có thêm một dòng ghi người gộp, thời điểm, hồ sơ phụ, hồ sơ chính (BR-L7-05).
+- **AC6.2** – Given nhóm đã được gộp xong, When truy vấn bảng hồ sơ sạch theo mã của Y, Then Y vẫn còn trong bảng, không bị xóa vật lý (QT-13).
+- **AC6.3** *(ngoại lệ)* – Given hồ sơ phụ Y đã bị gộp bởi thao tác khác, When Quản lý cửa hàng bấm "Xác nhận gộp", Then hệ thống báo xung đột, không gộp và tải lại danh sách.
 
 ## 4. Yêu cầu phi chức năng (mọi yêu cầu có ngưỡng số)
 
@@ -138,161 +124,122 @@ Quản lý chất lượng dữ liệu khách hàng: hệ thống phát hiện h
 | NFR7   | Phạm vi dữ liệu     | 100% dòng trả về cho Quản lý cửa hàng thuộc cửa hàng của họ; 0 dòng của cửa hàng khác (QT-14).                                                                                                   | Kiểm tra tự động theo store_key               |
 | NFR8   | Phản hồi khi nhập   | Cảnh báo thiếu thông tin bắt buộc hiện trong 1 giây hoặc ít hơn sau khi bấm Lưu.                                                                                                                 | Đo thời gian phản hồi của form                |
 
-## 5. Ràng buộc và quy tắc nghiệp vụ
+## 5. Use Case
 
-| **Mã**   | **Quy tắc**                                                                                                                                                                                      | **Nguồn**        | **FR**   |
-|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------|----------|
-| QT-01    | Số điện thoại khách hàng là duy nhất; số đã tồn tại thì hiển thị hồ sơ có sẵn thay vì tạo hồ sơ mới.                                                                                             | Bảng 9.1         | FR2      |
-| QT-02    | Số điện thoại chuẩn hóa về 10 chữ số bắt đầu bằng 0; các dạng +84…, 84…, dấu cách, dấu chấm đều quy về dạng chuẩn.                                                                               | Bảng 9.1         | FR1      |
-| QT-13    | Không xóa vật lý hồ sơ khách hàng; chỉ đánh dấu ngừng sử dụng và giữ lịch sử.                                                                                                                    | Bảng 9.1         | FR8, FR9 |
-| QT-14    | Nhân viên chỉ xem dữ liệu của nơi mình làm việc; quản lý xem toàn bộ đơn vị mình phụ trách.                                                                                                      | Bảng 9.1         | FR5, FR7 |
-| QT-15    | Số điện thoại hiển thị dạng che với mọi vai trò trừ Quản lý và Ban giám đốc.                                                                                                                     | Bảng 9.1         | FR5, FR9 |
-| BR-L7-01 | Pipeline không tự gộp hồ sơ có số điện thoại khác nhau; chỉ gộp sau khi Quản lý cửa hàng xác nhận.                                                                                               | Phân tích của SV | FR8      |
-| BR-L7-02 | Hồ sơ thô không chuẩn hóa được không bị xóa mà vào bản ghi bị loại kèm mã lý do.                                                                                                                 | Phân tích của SV | FR1, FR3 |
-| BR-L7-03 | Ngưỡng chất lượng chỉ được chốt sau khi đo tỉ lệ lỗi RAW trên dữ liệu thật.                                                                                                                      | Phân tích của SV | FR4      |
-| BR-L7-04 | Hai hồ sơ sạch là nghi trùng khi số điện thoại khác nhau nhưng trùng email (không rỗng, không phân biệt hoa thường), HOẶC trùng đồng thời họ tên không dấu đã chuẩn hóa và địa chỉ đã chuẩn hóa. | Phân tích của SV | FR7      |
-| BR-L7-05 | Mỗi lần gộp phải ghi người gộp, thời điểm, hồ sơ phụ và hồ sơ chính.                                                                                                                             | Phân tích của SV | FR9      |
+### 5.1. Danh sách use case
 
-## 6. Bảng truy vết yêu cầu
+| Mã | Use case | Actor | US liên quan |
+|---|---|---|---|
+| UC1 | Chạy pipeline làm sạch hồ sơ khách hàng | Quản lý cửa hàng, Bộ lập lịch, Tệp nguồn | US1, US2, US8 |
+| UC2 | Xem báo cáo tỉ lệ hồ sơ thiếu, sai định dạng | Quản lý cửa hàng, Marketing | US3 |
+| UC3 | Theo dõi mức độ sạch theo thời gian | Quản lý cửa hàng, Marketing | US4 |
+| UC4 | Xem danh sách hồ sơ nghi trùng | Quản lý cửa hàng | US5 |
+| UC5 | Xác nhận và gộp hồ sơ trùng (include UC4) | Quản lý cửa hàng | US6 |
+| UC6 | Xem lịch sử gộp hồ sơ | Quản lý cửa hàng, Marketing | US7 |
+| UC7 | Tạo hồ sơ khách hàng mới có kiểm tra | Quản lý cửa hàng | US1, US2, US8 |
+| UC8 | Xem danh sách bản ghi bị loại và lý do | Quản lý cửa hàng | US3, US8 |
 
-| **FR** | **User Story** | **Use Case**  | **MoSCoW** |
-|--------|----------------|---------------|------------|
-| FR1    | US1            | UC1, UC7      | MUST       |
-| FR2    | US2            | UC1, UC7      | SHOULD     |
-| FR3    | US8            | UC1, UC7, UC8 | SHOULD     |
-| FR4    | US3, US4       | UC1, UC2      | SHOULD     |
-| FR5    | US3            | UC2, UC8      | SHOULD     |
-| FR6    | US4            | UC3           | COULD      |
-| FR7    | US5            | UC4           | MUST       |
-| FR8    | US6            | UC5           | MUST       |
-| FR9    | US7            | UC6           | COULD      |
-
-| **NFR** | **FR liên quan**   | **MoSCoW** |
-|---------|--------------------|------------|
-| NFR1    | FR1, FR2, FR3, FR4 | SHOULD     |
-| NFR2    | FR1, FR2, FR4, FR8 | MUST       |
-| NFR3    | FR1, FR2           | MUST       |
-| NFR4    | FR5, FR6, FR7, FR9 | SHOULD     |
-| NFR5    | FR2, FR5, FR9      | MUST       |
-| NFR6    | FR1, FR3           | SHOULD     |
-| NFR7    | FR5, FR7           | MUST       |
-| NFR8    | FR3                | SHOULD     |
-
-*Kiểm tra hai chiều: mỗi US1–US8 xuất hiện ít nhất một lần ở cột User Story; mỗi UC1–UC8 xuất hiện ít nhất một lần ở cột Use Case; không có ô trống.*
-
-## Mục 2 – Use Case
+### 5.2. Use Case Diagram
 
 ![Use Case Diagram](usecase.png)
 
-*Hình 2.1 – Use Case Diagram của luồng L7 (file gốc: docs/usecase.drawio)*
+*Hình 5.1 – Use Case Diagram của luồng L7.* File gốc: `docs/usecase.drawio`.
 
-| **Mã** | **Use case**                                 | **Actor**                                | **US**        |
-|--------|----------------------------------------------|------------------------------------------|---------------|
-| UC1    | Chạy pipeline làm sạch hồ sơ khách hàng      | Quản lý cửa hàng, Bộ lập lịch, Tệp nguồn | US1, US2, US8 |
-| UC2    | Xem báo cáo tỉ lệ hồ sơ thiếu, sai định dạng | Quản lý cửa hàng, Marketing              | US3           |
-| UC3    | Theo dõi mức độ sạch theo thời gian          | Quản lý cửa hàng, Marketing              | US4           |
-| UC4    | Xem danh sách hồ sơ nghi trùng               | Quản lý cửa hàng                         | US5           |
-| UC5    | Xác nhận và gộp hồ sơ trùng (include UC4)    | Quản lý cửa hàng                         | US6           |
-| UC6    | Xem lịch sử gộp hồ sơ                        | Quản lý cửa hàng, Marketing              | US7           |
-| UC7    | Tạo hồ sơ khách hàng mới có kiểm tra         | Quản lý cửa hàng                         | US1, US2, US8 |
-| UC8    | Xem danh sách bản ghi bị loại và lý do       | Quản lý cửa hàng                         | US3, US8      |
+### 5.3. Đặc tả chi tiết UC1 – Chạy pipeline làm sạch hồ sơ khách hàng
 
-### Đặc tả use case UC1 – Chạy pipeline làm sạch hồ sơ khách hàng
+| Mục | Nội dung |
+|---|---|
+| Actor | Quản lý cửa hàng (hoặc Bộ lập lịch). Actor phụ: Tệp nguồn customers_raw.csv |
+| Mục tiêu | Biến hồ sơ thô thành hồ sơ sạch, đo chất lượng RAW và CLEAN, cập nhật kho dữ liệu |
+| Liên quan | US1, US2, US8; FR1, FR2, FR3, FR4 |
+| Điều kiện trước | Tệp customers_raw.csv có trong thư mục data/; PostgreSQL đang chạy và kết nối được |
+| Điều kiện sau (thành công) | Hồ sơ sạch có số điện thoại duy nhất. Số hồ sơ đọc = hồ sơ mới + hồ sơ gắn vào hồ sơ có sẵn + bản ghi bị loại. Đợt chạy có trạng thái SUCCESS |
 
-<table>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 79%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th><strong>Actor chính</strong></th>
-<th>Quản lý cửa hàng (hoặc Bộ lập lịch). Actor phụ: Tệp nguồn customers_raw.csv.</th>
-</tr>
-<tr class="odd">
-<th><strong>Mục tiêu</strong></th>
-<th>Biến hồ sơ thô thành hồ sơ sạch, đo chất lượng RAW và CLEAN, cập nhật kho dữ liệu.</th>
-</tr>
-<tr class="header">
-<th><strong>User Story</strong></th>
-<th>US1, US2, US8 (FR1–FR4)</th>
-</tr>
-<tr class="odd">
-<th><strong>Điều kiện trước</strong></th>
-<th>Tệp customers_raw.csv có trong thư mục data/; PostgreSQL đang chạy và kết nối được.</th>
-</tr>
-<tr class="header">
-<th><strong>Điều kiện sau</strong></th>
-<th>Hồ sơ sạch có số điện thoại duy nhất. Số hồ sơ đọc = hồ sơ mới + hồ sơ gắn vào hồ sơ có sẵn + bản ghi bị loại. Đợt chạy có trạng thái SUCCESS.</th>
-</tr>
-<tr class="odd">
-<th><strong>Luồng chính</strong></th>
-<th><p>1. Actor kích hoạt pipeline (lệnh make run hoặc lịch hằng tháng).</p>
-<p>2. Hệ thống tạo đợt chạy và ghi giờ bắt đầu.</p>
-<p>3. Hệ thống đọc tệp nguồn, nạp nguyên trạng vào hồ sơ thô và đối soát số dòng.</p>
-<p>4. Hệ thống đo các quy tắc chất lượng ở giai đoạn RAW.</p>
-<p>5. Hệ thống chuẩn hóa số điện thoại (QT-02) và họ tên.</p>
-<p>6. Hệ thống đối chiếu số điện thoại với hồ sơ sạch; nếu chưa có thì thêm hồ sơ mới.</p>
-<p>7. Hệ thống tìm các nhóm hồ sơ nghi trùng (BR-L7-04) và ghi trạng thái PENDING.</p>
-<p>8. Hệ thống đo các quy tắc ở giai đoạn CLEAN và nạp kết quả vào kho dữ liệu.</p>
-<p>9. Hệ thống ghi giờ kết thúc và hiển thị tóm tắt (số đọc, sạch, bị loại, nghi trùng, thời gian).</p></th>
-</tr>
-<tr class="header">
-<th><strong>Luồng ngoại lệ</strong></th>
-<th><p>3a. Tệp không có hoặc thiếu cột bắt buộc: dừng, ghi FAILED, báo rõ cột thiếu, không đổi bảng đích.</p>
-<p>3b. Số dòng nạp khác số dòng của tệp: hủy transaction, ghi FAILED.</p>
-<p>5a. Số điện thoại thiếu hoặc không đủ 10 chữ số: ghi vào bản ghi bị loại (PHONE_MISSING hoặc PHONE_INVALID), tiếp tục với hồ sơ khác.</p>
-<p>6a. Số điện thoại đã có (QT-01), kể cả khi chạy lại: không tạo hồ sơ mới, gắn hồ sơ thô vào hồ sơ có sẵn.</p>
-<p>8a. Mất kết nối cơ sở dữ liệu khi nạp kho dữ liệu: hủy toàn bộ transaction của đợt chạy, ghi FAILED.</p></th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
+**Luồng chính**
 
-### Đặc tả use case UC5 – Xác nhận và gộp hồ sơ trùng
+1. Actor kích hoạt pipeline (lệnh make run hoặc lịch hằng tháng).
+2. Hệ thống tạo đợt chạy và ghi giờ bắt đầu.
+3. Hệ thống đọc tệp nguồn, nạp nguyên trạng vào hồ sơ thô và đối soát số dòng.
+4. Hệ thống đo các quy tắc chất lượng ở giai đoạn RAW.
+5. Hệ thống chuẩn hóa số điện thoại (QT-02) và họ tên.
+6. Hệ thống đối chiếu số điện thoại với hồ sơ sạch; nếu chưa có thì thêm hồ sơ mới.
+7. Hệ thống tìm các nhóm hồ sơ nghi trùng (BR-L7-04) và ghi trạng thái PENDING.
+8. Hệ thống đo các quy tắc ở giai đoạn CLEAN và nạp kết quả vào kho dữ liệu.
+9. Hệ thống ghi giờ kết thúc và hiển thị tóm tắt (số đọc, sạch, bị loại, nghi trùng, thời gian).
 
-<table>
-<colgroup>
-<col style="width: 20%" />
-<col style="width: 79%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th><strong>Actor chính</strong></th>
-<th>Quản lý cửa hàng</th>
-</tr>
-<tr class="odd">
-<th><strong>User Story</strong></th>
-<th>US6 (FR8)</th>
-</tr>
-<tr class="header">
-<th><strong>Mục tiêu</strong></th>
-<th>Hợp nhất các hồ sơ được xác nhận là cùng một khách hàng, không xóa vật lý (QT-13).</th>
-</tr>
-<tr class="odd">
-<th><strong>Điều kiện trước</strong></th>
-<th>Có ít nhất một nhóm nghi trùng trạng thái PENDING thuộc cửa hàng của người dùng.</th>
-</tr>
-<tr class="header">
-<th><strong>Điều kiện sau</strong></th>
-<th>Hồ sơ phụ có is_active = false và merged_into_id trỏ về hồ sơ chính. Nhóm có trạng thái CONFIRMED. Lịch sử gộp có thêm một dòng (BR-L7-05).</th>
-</tr>
-<tr class="odd">
-<th><strong>Luồng chính</strong></th>
-<th><p>1. Actor mở danh sách hồ sơ nghi trùng (include UC4).</p>
-<p>2. Actor chọn một nhóm.</p>
-<p>3. Hệ thống hiển thị các hồ sơ trong nhóm cạnh nhau và đề xuất hồ sơ chính (created_at sớm nhất).</p>
-<p>4. Actor bấm “Xác nhận gộp”.</p>
-<p>5. Hệ thống gộp: đánh dấu hồ sơ phụ ngừng sử dụng, ghi merged_into_id, cập nhật trạng thái nhóm.</p>
-<p>6. Hệ thống ghi lịch sử gộp và làm mới danh sách.</p></th>
-</tr>
-<tr class="header">
-<th><strong>Luồng ngoại lệ</strong></th>
-<th><p>4a. Actor bấm “Không trùng”: nhóm chuyển REJECTED và không xuất hiện lại ở các đợt chạy sau.</p>
-<p>5a. Hồ sơ phụ đã bị gộp bởi thao tác khác: không gộp, báo xung đột và tải lại danh sách.</p></th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
+**Luồng ngoại lệ (đánh số theo bước)**
+
+- **3a** – Tệp không có hoặc thiếu cột bắt buộc: dừng, ghi FAILED, báo rõ cột thiếu, không đổi bảng đích.
+- **3b** – Số dòng nạp khác số dòng của tệp: hủy transaction, ghi FAILED.
+- **5a** – Số điện thoại thiếu hoặc không đủ 10 chữ số: ghi vào bản ghi bị loại (PHONE_MISSING hoặc PHONE_INVALID), tiếp tục với hồ sơ khác.
+- **6a** – Số điện thoại đã có (QT-01), kể cả khi chạy lại: không tạo hồ sơ mới, gắn hồ sơ thô vào hồ sơ có sẵn.
+- **8a** – Mất kết nối cơ sở dữ liệu khi nạp kho dữ liệu: hủy toàn bộ transaction của đợt chạy, ghi FAILED.
+
+### 5.4. Đặc tả chi tiết UC5 – Xác nhận và gộp hồ sơ trùng
+
+| Mục | Nội dung |
+|---|---|
+| Actor | Quản lý cửa hàng |
+| Mục tiêu | Hợp nhất các hồ sơ được xác nhận là cùng một khách hàng, không xóa vật lý (QT-13) |
+| Liên quan | US6; FR8 |
+| Điều kiện trước | Có ít nhất một nhóm nghi trùng trạng thái PENDING thuộc cửa hàng của người dùng |
+| Điều kiện sau (thành công) | Hồ sơ phụ có is_active = false và merged_into_id trỏ về hồ sơ chính. Nhóm có trạng thái CONFIRMED. Lịch sử gộp có thêm một dòng (BR-L7-05) |
+
+**Luồng chính**
+
+1. Actor mở danh sách hồ sơ nghi trùng (include UC4).
+2. Actor chọn một nhóm.
+3. Hệ thống hiển thị các hồ sơ trong nhóm cạnh nhau và đề xuất hồ sơ chính (created_at sớm nhất).
+4. Actor bấm "Xác nhận gộp".
+5. Hệ thống gộp: đánh dấu hồ sơ phụ ngừng sử dụng, ghi merged_into_id, cập nhật trạng thái nhóm.
+6. Hệ thống ghi lịch sử gộp và làm mới danh sách.
+
+**Luồng ngoại lệ (đánh số theo bước)**
+
+- **4a** – Actor bấm "Không trùng": nhóm chuyển REJECTED và không xuất hiện lại ở các đợt chạy sau.
+- **5a** – Hồ sơ phụ đã bị gộp bởi thao tác khác: không gộp, báo xung đột và tải lại danh sách.
+
+## 6. Ràng buộc và quy tắc nghiệp vụ
+
+| Mã | Quy tắc | Nguồn | FR |
+|---|---|---|---|
+| QT-01 | Số điện thoại khách hàng là duy nhất; số đã tồn tại thì hiển thị hồ sơ có sẵn thay vì tạo hồ sơ mới. | Bảng 9.1 | FR2 |
+| QT-02 | Số điện thoại chuẩn hóa về 10 chữ số bắt đầu bằng 0; các dạng +84…, 84…, dấu cách, dấu chấm đều quy về dạng chuẩn. | Bảng 9.1 | FR1 |
+| QT-13 | Không xóa vật lý hồ sơ khách hàng; chỉ đánh dấu ngừng sử dụng và giữ lịch sử. | Bảng 9.1 | FR8, FR9 |
+| QT-14 | Nhân viên chỉ xem dữ liệu của nơi mình làm việc; quản lý xem toàn bộ đơn vị mình phụ trách. | Bảng 9.1 | FR5, FR7 |
+| QT-15 | Số điện thoại hiển thị dạng che với mọi vai trò trừ Quản lý và Ban giám đốc. | Bảng 9.1 | FR5, FR9 |
+| BR-L7-01 | Pipeline không tự gộp hồ sơ có số điện thoại khác nhau; chỉ gộp sau khi Quản lý cửa hàng xác nhận. | Phân tích của SV | FR8 |
+| BR-L7-02 | Hồ sơ thô không chuẩn hóa được không bị xóa mà vào bản ghi bị loại kèm mã lý do. | Phân tích của SV | FR1, FR3 |
+| BR-L7-03 | Ngưỡng chất lượng chỉ được chốt sau khi đo tỉ lệ lỗi RAW trên dữ liệu thật. | Phân tích của SV | FR4 |
+| BR-L7-04 | Hai hồ sơ sạch là nghi trùng khi số điện thoại khác nhau nhưng trùng email (không rỗng, không phân biệt hoa thường), HOẶC trùng đồng thời họ tên không dấu đã chuẩn hóa và địa chỉ đã chuẩn hóa. | Phân tích của SV | FR7 |
+| BR-L7-05 | Mỗi lần gộp phải ghi người gộp, thời điểm, hồ sơ phụ và hồ sơ chính. | Phân tích của SV | FR9 |
+
+## 7. Bảng truy vết yêu cầu
+
+**Truy vết yêu cầu chức năng**
+
+| FR | User Story | Use Case | MoSCoW |
+|---|---|---|---|
+| FR1 | US1 | UC1, UC7 | MUST |
+| FR2 | US2 | UC1, UC7 | SHOULD |
+| FR3 | US8 | UC1, UC7, UC8 | SHOULD |
+| FR4 | US3, US4 | UC1, UC2 | SHOULD |
+| FR5 | US3 | UC2, UC8 | SHOULD |
+| FR6 | US4 | UC3 | COULD |
+| FR7 | US5 | UC4 | MUST |
+| FR8 | US6 | UC5 | MUST |
+| FR9 | US7 | UC6 | COULD |
+
+**Truy vết yêu cầu phi chức năng**
+
+| NFR | FR liên quan | MoSCoW |
+|---|---|---|
+| NFR1 | FR1, FR2, FR3, FR4 | SHOULD |
+| NFR2 | FR1, FR2, FR4, FR8 | MUST |
+| NFR3 | FR1, FR2 | MUST |
+| NFR4 | FR5, FR6, FR7, FR9 | SHOULD |
+| NFR5 | FR2, FR5, FR9 | MUST |
+| NFR6 | FR1, FR3 | SHOULD |
+| NFR7 | FR5, FR7 | MUST |
+| NFR8 | FR3 | SHOULD |
+
