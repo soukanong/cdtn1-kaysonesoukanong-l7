@@ -1,4 +1,4 @@
-# SRS rút gọn – Smart CRM Mekong Mobile: Luồng L7 "Chất lượng dữ liệu khách hàng"
+# SRS rút gọn : Luồng L7 "Chất lượng dữ liệu khách hàng"
 
 - Sinh viên: KAYSONE Souk Anong – MSSV 237480201is05
 - Môn: Chuyên đề tốt nghiệp 1 – Báo cáo buổi 4
