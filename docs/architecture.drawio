@@ -1,0 +1,40 @@
+<mxfile host="Electron">
+  <diagram name="Page-1" id="p1">
+    <mxGraphModel dx="1471" dy="940" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c2" parent="1" style="html=1;whiteSpace=wrap;fillColor=none;strokeColor=none;fontSize=14;" value="&lt;b&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;Hình 3.1 – Kiến trúc phân lớp 4 lớp của hệ thống L7&lt;/font&gt;&lt;/b&gt;" vertex="1">
+          <mxGeometry height="28" width="920" x="40" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" parent="1" style="html=1;whiteSpace=wrap;rounded=1;arcSize=5;fillColor=#E8F0F8;strokeColor=#2A6A9E;strokeWidth=2;fontSize=12;verticalAlign=top;spacingTop=8;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b style=&quot;&quot;&gt;1 · LỚP TRÌNH BÀY (Presentation)&lt;/b&gt;&lt;br&gt;&lt;br&gt;[CLI: make run] [Khung 1: Tổng quan độ sạch] [Khung 2: Xu hướng] [Khung 3: Nghi trùng và gộp hồ sơ, gồm form tạo hồ sơ mới]&lt;br&gt;&lt;br&gt;&lt;i style=&quot;&quot;&gt;Nhận thao tác người dùng, hiển thị kết quả (Streamlit). Không chứa quy tắc, không truy vấn dữ liệu trực tiếp.&lt;/i&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="920" x="40" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" parent="1" style="html=1;whiteSpace=wrap;rounded=1;arcSize=5;fillColor=#FDF0DC;strokeColor=#C0680A;strokeWidth=2;fontSize=12;verticalAlign=top;spacingTop=8;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;2 · LỚP NGHIỆP VỤ (Service)&lt;/b&gt;&lt;br&gt;&lt;br&gt;PipelineService – chuẩn hóa số điện thoại và họ tên, đối chiếu trùng, tìm nghi trùng, đo RAW/CLEAN&lt;br&gt;DuplicateReviewService – xác nhận gộp · CustomerIntakeService – kiểm tra hồ sơ mới · ReportService – báo cáo và xu hướng&lt;br&gt;&lt;br&gt;&lt;i&gt;TOÀN BỘ quy tắc QT-01, QT-02, QT-13, BR-L7-01 đến BR-L7-05 nằm trong lớp này.&lt;/i&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="920" x="40" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" parent="1" style="html=1;whiteSpace=wrap;rounded=1;arcSize=5;fillColor=#E2F3EA;strokeColor=#14905F;strokeWidth=2;fontSize=12;verticalAlign=top;spacingTop=8;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;3 · LỚP TRUY CẬP DỮ LIỆU (Repository)&lt;/b&gt;&lt;br&gt;&lt;br&gt;SourceRepository (customers_raw.csv, stores.csv) · CustomerRepository · DuplicateReviewRepository · DwhRepository&lt;br&gt;&lt;br&gt;&lt;i&gt;Đọc/ghi dữ liệu, che giấu SQLAlchemy và PostgreSQL. Không chứa quy tắc nghiệp vụ.&lt;/i&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="140" width="920" x="40" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" parent="1" style="html=1;whiteSpace=wrap;rounded=1;arcSize=5;fillColor=#F1F2F4;strokeColor=#2B3A4B;strokeWidth=2;fontSize=12;verticalAlign=top;spacingTop=8;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;4 · LỚP LƯU TRỮ (Data store – PostgreSQL 16)&lt;/b&gt;&lt;br&gt;&lt;br&gt;customers_raw.csv · stores.csv (chỉ đọc)&lt;br&gt;stg: stg_customer · core: customer_clean, reject_customer, duplicate_review, merge_log&lt;br&gt;dwh: dim_date, dim_run, dim_dq_rule, dim_store, fact_dq_result, fact_dq_issue · view: view_customer_masked&lt;br&gt;&lt;br&gt;&lt;i&gt;Giữ dữ liệu, bảo đảm toàn vẹn: khóa chính, khóa ngoại, UNIQUE. view_customer_masked che số điện thoại và lọc theo store_key. Tên bảng khớp Mục 4.&lt;/i&gt;&lt;/font&gt;" vertex="1">
+          <mxGeometry height="172" width="920" x="40" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" edge="1" parent="1" source="c3" style="html=1;endArrow=classic;strokeWidth=2;strokeColor=#1A1A1A;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#E67E22;strokeWidth=3;fillColor=#d5e8d4;" target="c4" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;gọi hàm (cùng tiến trình Python)&lt;/font&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" edge="1" parent="1" source="c4" style="html=1;endArrow=classic;strokeWidth=2;strokeColor=#d6b656;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#E67E22;strokeWidth=3;fillColor=#fff2cc;" target="c5" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;gọi qua giao diện Repository&lt;/font&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" edge="1" parent="1" source="c5" style="html=1;endArrow=classic;strokeWidth=2;strokeColor=#34495E;fontSize=11;labelBackgroundColor=#ffffff;strokeColor=#E67E22;strokeWidth=3;" target="c6" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;SQL qua SQLAlchemy (TCP 5432) / đọc tệp CSV&lt;/font&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" parent="1" style="html=1;whiteSpace=wrap;rounded=1;fillColor=#FDECEC;strokeColor=#8E1B1B;fontColor=#8E1B1B;strokeWidth=2;" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;NGOÀI PHẠM VI (WON&#39;T):&lt;/b&gt; đăng nhập thật (SSO) · Airflow / triển khai đám mây · đối sánh mờ bằng học máy · đồng bộ ngược về hệ thống nguồn · dữ liệu đơn hàng và bảo hành&lt;/font&gt;" vertex="1">
+          <mxGeometry height="60" width="920" x="40" y="810" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" parent="1" style="html=1;whiteSpace=wrap;fillColor=none;strokeColor=#999999;fontSize=11;" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Chú thích: ô lớn = một lớp · mũi tên cam = hướng phụ thuộc một chiều (lớp trên gọi lớp dưới, KHÔNG có chiều ngược lại) · [ ] = thành phần hoặc màn hình&lt;/font&gt;" vertex="1">
+          <mxGeometry height="40" width="920" x="40" y="900" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
