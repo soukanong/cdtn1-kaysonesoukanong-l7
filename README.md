@@ -59,7 +59,7 @@ Các file `.md` mở bằng VS Code (xem bản xem trước bằng `Ctrl+Shift+V
 | `ai-declaration.md` | Bảng khai báo sử dụng công cụ AI | Phụ lục |
 | `data-requirements.md` | Đặc tả yêu cầu dữ liệu (track DA) | Kèm BT1 |
 
-Nếu một file chưa xuất hiện trong thư mục `docs/`, nghĩa là bản đó chưa được đẩy lên repo.
+
 
 ## 6. Trạng thái hiện tại
 
