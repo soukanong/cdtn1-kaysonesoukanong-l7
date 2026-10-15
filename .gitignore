@@ -4,3 +4,5 @@ __pycache__/
 .env
 *.log
 data/raw/
+.venv/
+__pycache__/
