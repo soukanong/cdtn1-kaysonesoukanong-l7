@@ -1,11 +1,11 @@
 <mxfile host="Electron">
   <diagram name="หน้า-1" id="I9k5LjYNj4jXrJyWl2ql">
-    <mxGraphModel dx="1288" dy="823" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1471" dy="940" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="tFt2cK72m5aPtRSfvS6Y-8" parent="1" style="swimlane;startSize=0;" value="" vertex="1">
-          <mxGeometry height="675" width="418" x="216" y="261" as="geometry" />
+          <mxGeometry height="675" width="418" x="234" y="143" as="geometry" />
         </mxCell>
         <mxCell id="tFt2cK72m5aPtRSfvS6Y-9" parent="tFt2cK72m5aPtRSfvS6Y-8" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;b&gt;Hệ thống quản lý chất lượng dữ liệu khách hàng&lt;/b&gt;" vertex="1">
           <mxGeometry height="30" width="291" x="50.5" y="26" as="geometry" />
@@ -53,67 +53,70 @@
           <mxGeometry height="55" width="325" x="47" y="584" as="geometry" />
         </mxCell>
         <mxCell id="tFt2cK72m5aPtRSfvS6Y-17" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Quản lý cửa hàng" vertex="1">
-          <mxGeometry height="60" width="30" x="43" y="543" as="geometry" />
+          <mxGeometry height="60" width="30" x="61" y="425" as="geometry" />
         </mxCell>
         <mxCell id="tFt2cK72m5aPtRSfvS6Y-18" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" value="Marketing" vertex="1">
-          <mxGeometry height="60" width="30" x="740" y="603" as="geometry" />
+          <mxGeometry height="60" width="30" x="758" y="485" as="geometry" />
         </mxCell>
         <mxCell id="tFt2cK72m5aPtRSfvS6Y-24" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="tFt2cK72m5aPtRSfvS6Y-10" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="91.2" y="561.6" as="sourcePoint" />
-            <mxPoint x="198" y="458" as="targetPoint" />
+            <mxPoint x="109.2" y="443.6" as="sourcePoint" />
+            <mxPoint x="216" y="340" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="y-gCoy1pBuexS-UpGCE5-9" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="92" y="564" as="sourcePoint" />
-            <mxPoint x="262.45" y="502" as="targetPoint" />
+            <mxPoint x="110" y="446" as="sourcePoint" />
+            <mxPoint x="280.45" y="384" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="y-gCoy1pBuexS-UpGCE5-11" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;entryX=0.01;entryY=0.317;entryDx=0;entryDy=0;entryPerimeter=0;" target="tFt2cK72m5aPtRSfvS6Y-16" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="94.4" y="566.4" as="sourcePoint" />
-            <mxPoint x="268.89" y="737" as="targetPoint" />
+            <mxPoint x="112.4" y="448.4" as="sourcePoint" />
+            <mxPoint x="286.89" y="619" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="y-gCoy1pBuexS-UpGCE5-12" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="tFt2cK72m5aPtRSfvS6Y-11" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="96" y="563.5" as="sourcePoint" />
-            <mxPoint x="202.90000000000114" y="705.1" as="targetPoint" />
+            <mxPoint x="114" y="445.5" as="sourcePoint" />
+            <mxPoint x="220.90000000000114" y="587.1" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="y-gCoy1pBuexS-UpGCE5-13" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="y-gCoy1pBuexS-UpGCE5-1" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="93.6" y="564" as="sourcePoint" />
-            <mxPoint x="261.89" y="844" as="targetPoint" />
+            <mxPoint x="111.6" y="446" as="sourcePoint" />
+            <mxPoint x="279.89" y="726" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="y-gCoy1pBuexS-UpGCE5-15" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="587" y="728.22" as="sourcePoint" />
-            <mxPoint x="727.2" y="635.2" as="targetPoint" />
+            <mxPoint x="605" y="610.22" as="sourcePoint" />
+            <mxPoint x="745.2" y="517.2" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="y-gCoy1pBuexS-UpGCE5-16" edge="1" parent="1" source="tFt2cK72m5aPtRSfvS6Y-14" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="587" y="650.22" as="sourcePoint" />
-            <mxPoint x="727.2" y="633.6" as="targetPoint" />
+            <mxPoint x="605" y="532.22" as="sourcePoint" />
+            <mxPoint x="745.2" y="515.6" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="y-gCoy1pBuexS-UpGCE5-17" edge="1" parent="1" source="tFt2cK72m5aPtRSfvS6Y-13" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="661" y="710.22" as="sourcePoint" />
-            <mxPoint x="729.6" y="632" as="targetPoint" />
+            <mxPoint x="679" y="592.22" as="sourcePoint" />
+            <mxPoint x="747.6" y="514" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="y-gCoy1pBuexS-UpGCE5-21" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="include" vertex="1">
-          <mxGeometry height="30" width="60" x="454" y="596" as="geometry" />
+          <mxGeometry height="30" width="60" x="472" y="478" as="geometry" />
         </mxCell>
         <mxCell id="y-gCoy1pBuexS-UpGCE5-7" edge="1" parent="1" style="endArrow=none;html=1;rounded=0;entryX=0.018;entryY=0.318;entryDx=0;entryDy=0;entryPerimeter=0;" target="tFt2cK72m5aPtRSfvS6Y-12" value="">
           <mxGeometry height="50" relative="1" width="50" as="geometry">
-            <mxPoint x="96" y="566.5" as="sourcePoint" />
-            <mxPoint x="206.5" y="824.19" as="targetPoint" />
+            <mxPoint x="114" y="448.5" as="sourcePoint" />
+            <mxPoint x="224.5" y="706.19" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="6WUJ5MQ3-GoeFe0M0I9C-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-size: 18px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Chú thích ký hiệu&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;font-size: 18px; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;Tác nhân (actor): người dùng bên ngoài tương tác với hệ thống&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;Use case: một chức năng hệ thống cung cấp cho tác nhân&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;Đường liền: tác nhân tham gia use case&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;include: use case nguồn luôn bao gồm use case đích (UC5 include UC4)&lt;/div&gt;&lt;div style=&quot;text-align: justify;&quot;&gt;Ranh giới hệ thống: phần nằm trong khung thuộc phạm vi hệ thống&lt;/div&gt;" vertex="1">
+          <mxGeometry height="132" width="466" x="29" y="880" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
