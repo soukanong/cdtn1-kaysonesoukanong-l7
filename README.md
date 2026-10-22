@@ -14,16 +14,19 @@ Hệ thống phục vụ Quản lý cửa hàng (chạy làm sạch, xác nhận
 
 ## 2. Yêu cầu môi trường
 
-- Python 3.11 trở lên
-- Thư viện: pandas, SQLAlchemy, Streamlit
-- PostgreSQL 16
+- Python 3.11, pip
+- Tạo môi trường ảo: `python -m venv .venv`, rồi kích hoạt: `.venv\Scripts\Activate.ps1`
+- Cài thư viện: `pip install -r requirements.txt` (hiện có pandas 3.0.6, numpy 2.4.6)
+- Tệp nguồn: `data/customers_raw.csv` (không commit vì chứa dữ liệu khách hàng)
+- Dự kiến dùng thêm ở BT2: SQLAlchemy, PostgreSQL 16, Streamlit (chưa cài ở buổi 8)
 - Biến môi trường: xem `.env.example` (không commit file `.env`)
 
 ## 3. Hướng dẫn chạy
 
-Bài tập 1 chỉ gồm tài liệu và sơ đồ, chưa có mã nguồn. Hướng dẫn chạy (tối đa 4 bước) sẽ được cập nhật ở Bài tập 2, khi pipeline được hiện thực (dự kiến chạy bằng lệnh `make run`).
-
-Dữ liệu nguồn dung lượng lớn không được commit; đặt tệp mẫu vào thư mục `data/` khi chạy.
+1. Kích hoạt môi trường ảo (xem mục 2).
+2. Đặt tệp `customers_raw.csv` vào thư mục `data/`.
+3. Chạy từ thư mục gốc của repo: `python -m src.pipeline`
+4. Kết quả in ra màn hình: số dòng, số cột, tỉ lệ ô trống, số dòng trước/sau và số dòng bị loại. Bảng reject lưu ở `reports/reject_customer.csv` (không commit).
 
 ## 4. Cấu trúc thư mục
 
@@ -71,6 +74,22 @@ Các file `.md` mở bằng VS Code (xem bản xem trước bằng `Ctrl+Shift+V
 - [x] Mô hình dữ liệu (data flow, lược đồ hình sao) và đặc tả yêu cầu dữ liệu
 - [x] Wireframe 3 màn hình
 - [x] Bảng khai báo sử dụng công cụ AI
+
+
+**Buổi 8 – Sprint 1 (module đầu tiên)**
+
+- [x] Ghi quyết định điều chỉnh thiết kế theo phản hồi BT1 (`docs/thay-doi-thiet-ke.md`)
+- [x] Cấu trúc `src/` theo sơ đồ kiến trúc (extract, transform, quality, load, pipeline.py)
+- [x] Môi trường ảo và thư viện đã cài
+- [x] Đọc tệp nguồn: 67.037 dòng, 6 cột; tỉ lệ ô trống: so_dien_thoai 6,17%, email 44,99%, dia_chi 8,98%, các cột còn lại 0%
+- [x] Hàm chuẩn hóa số điện thoại; 4.133 dòng bị loại (PHONE_MISSING), 62.904 dòng hợp lệ
+- [x] Ảnh kết quả chạy: `docs/ket-qua-chay.png`
+- [ ] Chuẩn hóa họ tên, email chưa làm
+- [ ] Tìm hồ sơ nghi trùng, đo RAW/CLEAN chưa làm
+- [ ] Nạp PostgreSQL (`src/load`) và dashboard chưa làm
+- [ ] Chưa có unit test
+- Ghi chú: tệp thật không có cột `store_code` (chỉ có record_id, ho_ten, so_dien_thoai, email, dia_chi, ngay_tao), cần quyết định lại cho `dim_store` ở BT2
+- Ghi chú: mạng chậm nên cài pandas bị timeout lần đầu, đã cài lại thành công
 
 ## 7. Khai báo sử dụng công cụ AI
 
