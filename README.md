@@ -1,96 +1,130 @@
 # Quản lý chất lượng dữ liệu khách hàng – L7 (Smart CRM – Mekong Mobile)
 
-- **Sinh viên:** KAYSONE Souk Anong – MSSV 237480201is05 – LHP 261_71ITGR40203_06
-- **Track:** DA
-- **Học phần:** Chuyên đề tốt nghiệp 1 – HK1, năm học 2026–2027 (Trường Đại học Văn Lang, Khoa Công nghệ Thông tin)
-- **GVHD:** TS Nguyễn Trí Hải
-- **Luồng nghiệp vụ:** L7 – Chất lượng dữ liệu khách hàng
+- **Sinh viên:** KAYSONE Souk Anong · MSSV 237480201is05 · LHP 261_71ITGR40203_06
+- **Track:** DA · **GVHD:** TS Nguyễn Trí Hải
+- **Học phần:** Chuyên đề tốt nghiệp 1, HK1 năm học 2026 – 2027, Trường Đại học Văn Lang
+- **Phiên bản nộp Bài tập 2:** tag `v0.2`
 
-## 1. Mục tiêu
+## 1. Hệ thống làm gì
 
-Quản lý chất lượng dữ liệu khách hàng: hệ thống phát hiện hồ sơ trùng, thiếu và sai định dạng, chuẩn hóa số điện thoại và tên, gộp các hồ sơ được xác nhận trùng, và báo cáo mức độ sạch của dữ liệu theo thời gian.
-
-Hệ thống phục vụ Quản lý cửa hàng (chạy làm sạch, xác nhận gộp hồ sơ) và Marketing (xem báo cáo, số điện thoại được che). Dữ liệu nguồn là tệp mẫu `customers_raw.csv` (khoảng 65.000 bản ghi) của case study Mekong Mobile.
+Pipeline Python đọc tệp hồ sơ khách hàng thô `customers_raw.csv` (67.037 dòng), chuẩn hóa số điện thoại, họ tên và email, đưa hồ sơ không hợp lệ vào bảng reject kèm mã lý do, đo sáu quy tắc chất lượng DQ01–DQ06 ở hai giai đoạn RAW và CLEAN rồi nạp vào PostgreSQL (lớp `stg`, `core` và kho dữ liệu hình sao `dwh`). Hồ sơ nghi trùng chỉ được đề xuất, chỉ gộp sau khi Quản lý cửa hàng xác nhận trên dashboard Streamlit. Chạy lại nhiều lần không làm nhân đôi dữ liệu.
 
 ## 2. Yêu cầu môi trường
 
-- Python 3.11, pip
-- Tạo môi trường ảo: `python -m venv .venv`, rồi kích hoạt: `.venv\Scripts\Activate.ps1`
-- Cài thư viện: `pip install -r requirements.txt` (hiện có pandas 3.0.6, numpy 2.4.6)
-- Tệp nguồn: `data/customers_raw.csv` (không commit vì chứa dữ liệu khách hàng)
-- Dự kiến dùng thêm ở BT2: SQLAlchemy, PostgreSQL 16, Streamlit (chưa cài ở buổi 8)
-- Biến môi trường: xem `.env.example` (không commit file `.env`)
+| Thành phần | Phiên bản |
+|---|---|
+| Python | 3.11 trở lên |
+| PostgreSQL | 16 (dùng Docker hoặc cài sẵn) |
+| Docker Desktop | Tùy chọn, chỉ để bật PostgreSQL bằng một lệnh |
+| Thư viện Python | Khóa phiên bản (`==`) trong `requirements.txt` |
 
-## 3. Hướng dẫn chạy
+## 3. Các bước dựng và chạy (mỗi bước một lệnh)
 
-1. Kích hoạt môi trường ảo (xem mục 2).
-2. Đặt tệp `customers_raw.csv` vào thư mục `data/`.
-3. Chạy từ thư mục gốc của repo: `python -m src.pipeline`
-4. Kết quả in ra màn hình: số dòng, số cột, tỉ lệ ô trống, số dòng trước/sau và số dòng bị loại. Bảng reject lưu ở `reports/reject_customer.csv` (không commit).
+Lệnh cho Windows PowerShell. Trên Linux hoặc macOS: bước 2 là `source .venv/bin/activate` và bước 4 là `cp .env.example .env`.
 
-## 4. Cấu trúc thư mục
-
-```
-cdtn1-kaysonesoukanong-l7/
-├── README.md              ← tên đề tài, luồng, track, cách mở các file thiết kế
-├── docs/                  ← toàn bộ tài liệu và sơ đồ của BT1
-├── data/                  ← dữ liệu mẫu (không commit dữ liệu lớn)
-├── src/                   ← mã nguồn (BT2)
-├── tests/                 ← kiểm thử (BT2/BT3)
-├── .env.example           ← tên biến môi trường, không chứa giá trị thật
-└── .gitignore
-```
-
-## 5. Cách mở các file thiết kế
-
-Các file `.drawio` là bản gốc. Mở bằng một trong hai cách:
-
-- Truy cập https://app.diagrams.net, chọn **Open Existing Diagram** và chọn file `.drawio`.
-- Trong VS Code, cài tiện ích **Draw.io Integration** rồi mở trực tiếp file `.drawio`.
-
-Các file `.md` mở bằng VS Code (xem bản xem trước bằng `Ctrl+Shift+V`) hoặc ngay trên GitHub.
-
-| File trong `docs/` | Nội dung | Mục trong PDF nộp |
+| Bước | Việc | Lệnh |
 |---|---|---|
-| `srs.md` | Bản SRS rút gọn (gồm phụ lục Use Case) | Mục 1 (và Mục 2) |
-| `usecase.drawio` | Use Case Diagram | Mục 2 |
-| `architecture.drawio` | Sơ đồ kiến trúc 4 lớp | Mục 3 |
-| `dataflow.drawio` | Sơ đồ luồng dữ liệu | Mục 4 |
-| `erd.drawio` | Lược đồ hình sao của kho dữ liệu | Mục 4 |
-| `wireframe.drawio` | Wireframe 3 màn hình | Mục 5 |
-| `export/*.png` | Ảnh xuất để chèn vào PDF | – |
-| `ai-declaration.md` | Bảng khai báo sử dụng công cụ AI | Phụ lục |
-| `data-requirements.md` | Đặc tả yêu cầu dữ liệu (track DA) | Kèm BT1 |
+| 1 | Tạo môi trường ảo | `python -m venv .venv` |
+| 2 | Kích hoạt | `.venv\Scripts\Activate.ps1` |
+| 3 | Cài thư viện | `pip install -r requirements.txt` |
+| 4 | Tạo tệp cấu hình | `Copy-Item .env.example .env` |
+| 5 | Bật PostgreSQL | `docker compose up -d db` |
+| 6 | Chạy pipeline | `python -m src.pipeline` |
+| 7 | Chạy kiểm thử | `python -m pytest -q` |
+| 8 | Mở dashboard (http://localhost:8501) | `streamlit run dashboard/app.py` |
 
+Ghi chú:
 
+- Bước 2 báo bị chặn script: chạy `Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned` rồi kích hoạt lại.
+- Bước 5 dùng cổng 5432. Nếu cổng này đã bị chiếm (ví dụ PostgreSQL cài sẵn trên máy), thêm dòng `DB_PORT=5433` vào `.env` và đổi cổng trong `DWH_URL` thành `5433`. Không dùng Docker thì cài PostgreSQL 16, tạo người dùng và cơ sở dữ liệu khớp với `DWH_URL`.
+- Bước 6 tự tạo schema và bảng (các tệp `sql/*.sql` đều idempotent).
+- Dữ liệu: nếu không có `data/customers_raw.csv` (không commit vì là dữ liệu khách hàng), pipeline tự dùng `data/mau/customers_raw_sample.csv` (400 dòng, dữ liệu giả). Muốn chạy tệp thật, đặt tệp vào `data/` hoặc đặt `SOURCE_CSV` trong `.env`.
 
-## 6. Trạng thái hiện tại
+## 4. Kiểm tra hệ thống đã chạy đúng
 
-**Bài tập 1 – Phân tích và Thiết kế**
+| Việc kiểm tra | Lệnh | Kết quả đúng |
+|---|---|---|
+| Pipeline chạy xong | `python -m src.pipeline` | Dòng `Kết luận: THANH_CONG (mã thoát 0)` và dòng `Đọc ... \| loại ... \| sạch ...` |
+| Số liệu với dữ liệu mẫu | (cùng lệnh trên, không có tệp thật) | `Đọc 400 \| loại 49 \| sạch 323 \| nghi trùng 23 nhóm` |
+| Chạy lại lần hai không nhân đôi | Chạy bước 6 lần nữa rồi đếm (lệnh bên dưới bảng) | `clean`, `reject`, `dup`, `issue` bằng lần 1; `runs` tăng thêm 1 |
+| Chỉ đo, không cần cơ sở dữ liệu | `python -m src.pipeline --check-only` | `Kết luận: CHI_KIEM_KHONG_NAP`, không kết nối PostgreSQL |
+| Kiểm thử đạt | `python -m pytest -q` | Dòng cuối dạng `... passed in ...s`, không có `failed` |
+| Dữ liệu sai bị từ chối đúng cách | `python -m pytest -k "TC06 or TC09 or IM02" -v` | Các kiểm thử đạt: số điện thoại rỗng hoặc sai vào bảng reject; tệp thiếu cột bị từ chối; form báo lỗi theo từng trường |
+| Dashboard không sập khi mất cơ sở dữ liệu | `docker compose stop db` rồi tải lại trang | Thông báo đỏ "Không đọc được dữ liệu..." và nút Thử lại, không hiện chuỗi kết nối; bật lại bằng `docker compose start db` |
 
-- [x] Bản SRS rút gọn (`docs/srs.md`)
-- [x] Use Case Diagram và đặc tả use case
-- [x] Thiết kế kiến trúc và các câu lập luận
-- [x] Mô hình dữ liệu (data flow, lược đồ hình sao) và đặc tả yêu cầu dữ liệu
-- [x] Wireframe 3 màn hình
-- [x] Bảng khai báo sử dụng công cụ AI
+Lệnh đếm số dòng (dùng cho dòng "Chạy lại lần hai"):
 
+```powershell
+docker compose exec db psql -U l7_user -d l7_dq -c "select (select count(*) from core.customer_clean) as clean, (select count(*) from core.reject_customer) as reject, (select count(*) from core.duplicate_review) as dup, (select count(*) from dwh.fact_dq_issue) as issue, (select count(*) from dwh.dim_run) as runs;"
+```
 
-**Buổi 8 – Sprint 1 (module đầu tiên)**
+Mã thoát của pipeline: `0` thành công · `1` lỗi kỹ thuật (thiếu tệp, thiếu cột, mất kết nối) · `2` dừng vì chất lượng đầu ra không đạt (DQ01–DQ04 ở CLEAN). Báo cáo luôn được ghi vào `reports/chat-luong-*.md` và `.json`, kể cả khi thất bại.
 
-- [x] Ghi quyết định điều chỉnh thiết kế theo phản hồi BT1 (`docs/thay-doi-thiet-ke.md`)
-- [x] Cấu trúc `src/` theo sơ đồ kiến trúc (extract, transform, quality, load, pipeline.py)
-- [x] Môi trường ảo và thư viện đã cài
-- [x] Đọc tệp nguồn: 67.037 dòng, 6 cột; tỉ lệ ô trống: so_dien_thoai 6,17%, email 44,99%, dia_chi 8,98%, các cột còn lại 0%
-- [x] Hàm chuẩn hóa số điện thoại; 4.133 dòng bị loại (PHONE_MISSING), 62.904 dòng hợp lệ
-- [x] Ảnh kết quả chạy: `docs/ket-qua-chay.png`
-- [ ] Chuẩn hóa họ tên, email chưa làm
-- [ ] Tìm hồ sơ nghi trùng, đo RAW/CLEAN chưa làm
-- [ ] Nạp PostgreSQL (`src/load`) và dashboard chưa làm
-- [ ] Chưa có unit test
-- Ghi chú: tệp thật không có cột `store_code` (chỉ có record_id, ho_ten, so_dien_thoai, email, dia_chi, ngay_tao), cần quyết định lại cho `dim_store` ở BT2
-- Ghi chú: mạng chậm nên cài pandas bị timeout lần đầu, đã cài lại thành công
+## 5. Dashboard
 
-## 7. Khai báo sử dụng công cụ AI
+Ba khung theo wireframe BT1: (1) Tổng quan độ sạch, (2) Xu hướng theo thời gian, (3) Nghi trùng và gộp hồ sơ. Xử lý đủ ba trạng thái: đang tải, rỗng và lỗi kết nối. Vai trò chỉ mô phỏng ở thanh bên: Quản lý cửa hàng xem số điện thoại đầy đủ và được xác nhận gộp; Marketing chỉ xem số dạng che (`035****926`, đọc qua `core.view_customer_masked`) và bị từ chối khi bấm Xác nhận gộp.
 
-Xem chi tiết tại [`docs/ai-declaration.md`](docs/ai-declaration.md).
+## 6. Cấu trúc thư mục (khớp kiến trúc BT1)
+
+```
+src/extract/     Pha 1: đọc tệp nguồn nguyên trạng
+src/transform/   Pha 2: quy tắc nghiệp vụ (QT-01, QT-02, BR-L7-04, gộp hồ sơ, tạo hồ sơ mới), hàm thuần
+src/quality/     Pha 3: đo DQ01–DQ06 ở RAW và CLEAN
+src/load/        Pha 4: ghi PostgreSQL (loader.py) và thao tác của người dùng (customer_repo.py)
+src/report/      Truy vấn chỉ đọc cho dashboard
+src/pipeline.py  Điều phối bốn pha
+dashboard/       Streamlit, ba khung
+sql/             DDL idempotent: kho dữ liệu dwh, stg + core, view che số điện thoại
+configs/         Ngưỡng chất lượng (thresholds.yaml)
+tests/           Kiểm thử pytest
+scripts/         make_sample_data.py (tạo dữ liệu mẫu), time_dashboard.py (đo thời gian trang)
+data/mau/        Dữ liệu mẫu nhỏ để chạy được ngay
+docs/            Tài liệu BT1, thay-doi-thiet-ke.md, ai-disclosure.md, data-requirements.md
+```
+
+Chiều gọi chỉ đi xuống: dashboard → transform / load / report → PostgreSQL. `transform/` và `quality/` không đọc ghi cơ sở dữ liệu.
+
+## 7. Biến môi trường
+
+Xem `.env.example`. **Không commit `.env`** (đã nằm trong `.gitignore`).
+
+| Biến | Ý nghĩa |
+|---|---|
+| `DWH_URL` | Chuỗi kết nối PostgreSQL |
+| `SOURCE_CSV` | Tệp nguồn; bỏ trống thì dùng tệp thật nếu có, nếu không dùng dữ liệu mẫu |
+| `THRESHOLDS_FILE`, `REPORT_DIR`, `LOG_LEVEL` | Tệp ngưỡng, thư mục báo cáo, mức log |
+| `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `DB_PORT` | Dùng cho `docker-compose.yml` |
+
+## 8. Kết quả đo NFR
+
+Máy đo: AMD Ryzen 7 5700U (8 nhân, 16 luồng), RAM 7,4 GB, PostgreSQL 16 chạy trong Docker, tệp thật 67.037 dòng.
+
+| NFR | Ngưỡng | Kết quả đo | Kết luận |
+|---|---|---|---|
+| NFR1 – pipeline xử lý toàn bộ tệp | < 5 phút | 101,5 giây (lần 1), 93,2 giây (lần 2) | Đạt |
+| NFR2 – chạy lại hai lần, số dòng chênh lệch 0 | 0 dòng | `customer_clean` 51.279, `reject_customer` 4.133, `duplicate_review` 5.438, `fact_dq_issue` 30.666: không đổi giữa hai lần | Đạt |
+| NFR4 – tải trang dashboard | ≤ 3 giây | Dùng bình thường: khoảng 1,32 giây trên trình duyệt, 0,21–0,26 giây phía máy chủ. Lần tải đầu sau khi bật máy chủ: 3,72 giây (nạp thư viện chiếm phần lớn) | Đạt khi dùng bình thường; lần đầu không đạt |
+
+Cách đo: `python -m src.pipeline` hai lần liên tiếp rồi đếm bằng lệnh ở mục 4; `python scripts/time_dashboard.py` (lần 1 là khởi động nguội, lần 2 và 3 là ổn định) và đồng hồ bấm giờ khi tải lại trang.
+
+Kết quả chất lượng trên tệp thật: bản ghi bị loại 4.133 (toàn bộ `PHONE_MISSING`), hồ sơ sạch 51.279, 2.624 nhóm nghi trùng, điểm sạch 98,23. DQ01–DQ05 đạt ở CLEAN; DQ06 (89,4%, ngưỡng 95%) không đạt vì chưa có xác nhận gộp.
+
+## 9. Hạn chế đã biết
+
+- Tệp nguồn thật không có cột cửa hàng nên chưa có bộ lọc theo cửa hàng và NFR7 chưa kiểm chứng được (TD-07).
+- DQ06 không đạt ngưỡng cho đến khi Quản lý cửa hàng xác nhận gộp các nhóm nghi trùng (TD-14).
+- Lần tải đầu tiên của dashboard sau khi bật máy chủ vượt 3 giây (mục 8).
+- `docker-compose.yml` chỉ dựng PostgreSQL; pipeline và dashboard chạy bằng Python trên máy.
+
+## 10. Tài liệu và trạng thái
+
+| Bài tập | Nội dung | Trạng thái |
+|---|---|---|
+| BT1 | Phân tích và thiết kế: `docs/srs.md`, `docs/*.drawio`, `docs/export/` | Đã nộp |
+| BT2 | Module cốt lõi chạy được (tag `v0.2`) | Nộp bản này |
+| BT3 | Tích hợp và đóng gói | Chưa thực hiện |
+
+- Thay đổi so với thiết kế BT1: [`docs/thay-doi-thiet-ke.md`](docs/thay-doi-thiet-ke.md)
+- Đặc tả yêu cầu dữ liệu và số đo: [`docs/data-requirements.md`](docs/data-requirements.md)
+- Khai báo sử dụng công cụ AI: [`docs/ai-disclosure.md`](docs/ai-disclosure.md)
+- Kiến trúc đã hiện thực: `docs/architecture-thuc-te.png`
