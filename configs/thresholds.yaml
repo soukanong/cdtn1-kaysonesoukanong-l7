@@ -1,0 +1,54 @@
+# Ngưỡng đạt (%) của sáu quy tắc chất lượng DQ01-DQ06 (SRS Mục 4.3).
+#
+# BR-L7-03: ngưỡng chỉ được CHỐT sau khi đo tỉ lệ lỗi RAW trên dữ liệu thật.
+# Các giá trị dưới đây là ngưỡng khởi điểm theo BT1. Sau khi chạy pipeline và đọc
+# reports/*.md, SỬA threshold_pct của DQ05, DQ06 nếu cần và GHI LÝ DO vào trường
+# `reason`. Hạ ngưỡng để "cho pipeline chạy" mà không ghi lý do là không trung thực.
+# Đổi ngưỡng -> dim_dq_rule thêm một dòng SCD loại 2 (giữ dòng cũ), xem sql/001.
+#
+# gate: true  -> nếu quy tắc KHÔNG đạt ở giai đoạn CLEAN, pipeline dừng (mã thoát 2)
+#                và không nạp kho dữ liệu. Chỉ đặt true cho quy tắc mà đầu ra sạch
+#                BẮT BUỘC thỏa (NFR3). DQ05/DQ06 chỉ được báo cáo, không chặn nạp.
+rules:
+  DQ01:
+    name: Thiếu số điện thoại trong hồ sơ sạch = 0%
+    dimension: completeness
+    column: phone
+    threshold_pct: 100.0
+    gate: true
+    reason: NFR3 - hồ sơ sạch không được thiếu số điện thoại.
+  DQ02:
+    name: 100% số điện thoại hồ sơ sạch khớp ^0[0-9]{9}$
+    dimension: validity
+    column: phone
+    threshold_pct: 100.0
+    gate: true
+    reason: NFR3 - định dạng chuẩn QT-02.
+  DQ03:
+    name: Số điện thoại duy nhất trong hồ sơ sạch
+    dimension: uniqueness
+    column: phone
+    threshold_pct: 100.0
+    gate: true
+    reason: QT-01 - số điện thoại là duy nhất.
+  DQ04:
+    name: Họ tên không rỗng, không khoảng trắng đầu/cuối/liên tiếp
+    dimension: validity
+    column: full_name
+    threshold_pct: 100.0
+    gate: true
+    reason: Họ tên đã chuẩn hóa ở bước transform.
+  DQ05:
+    name: Từ 99% email khác rỗng trở lên đúng định dạng
+    dimension: validity
+    column: email
+    threshold_pct: 99.0
+    gate: false
+    reason: Khởi điểm theo BT1; CHỈNH sau khi đo RAW (BR-L7-03) và ghi lý do tại đây.
+  DQ06:
+    name: Hồ sơ nằm trong nhóm nghi trùng chưa xử lý không quá 5% hồ sơ sạch
+    dimension: consistency
+    column: duplicate_review
+    threshold_pct: 95.0
+    gate: false
+    reason: Khởi điểm theo BT1 (tối đa 5% chờ xử lý); phụ thuộc người xác nhận gộp nên không chặn nạp.
