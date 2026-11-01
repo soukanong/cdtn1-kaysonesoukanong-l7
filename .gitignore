@@ -1,10 +1,17 @@
-﻿venv/
-__pycache__/
-.ipynb_checkpoints/
+# Bí mật và cấu hình thật
 .env
-*.log
-data/raw/
+
+# Môi trường ảo và bộ nhớ đệm
 .venv/
 __pycache__/
+*.pyc
+.pytest_cache/
+
+# Dữ liệu lớn / dữ liệu khách hàng thật (chỉ commit data/mau/)
 data/*.csv
-reports/
+!data/mau/
+
+# Báo cáo sinh tự động mỗi lần chạy
+reports/*
+!reports/.gitkeep
+*.db
