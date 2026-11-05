@@ -19,9 +19,9 @@ Ghi chú trung thực về commit: cả ba lỗi được phát hiện và sửa
 ## BUG-02 – created_at đọc nhầm tháng và ngày
 - **Cách tái hiện:** đọc cột `ngay_tao` dạng `2024-05-06` bằng `pd.to_datetime(..., format="mixed", dayfirst=True)`: kết quả 2024-06-05.
 - **Phát hiện:** khi đo định dạng thật của `ngay_tao` trên `customers_raw.csv` (dạng yyyy-mm-dd), khác với dạng dd/mm/yyyy mà mã giả định.
-- **Ảnh hưởng:** sai `created_at` của khoảng 40% hồ sơ, ảnh hưởng việc chọn hồ sơ chính khi gộp; không ảnh hưởng số đo chất lượng.
+- **Ảnh hưởng:** sai `created_at` của 36,5% hồ sơ (18.717 / 51.279), ảnh hưởng việc chọn hồ sơ chính khi gộp; không ảnh hưởng số đo chất lượng.
 - **Cách sửa:** hàm `parse_dates` trong `src/transform/rules.py` đọc ISO trước; upsert cập nhật cả `created_at`; thêm test TR09, TR10.
-- **Kiểm chứng sau khi sửa:** `python -m pytest tests/test_rules.py -v` (TR09, TR10), kết quả: [PASS/FAIL].
+- **Kiểm chứng sau khi sửa:** `python -m pytest tests/test_rules.py -v` (TR09, TR10), kết quả: PASS (TR09, TR10); truy vấn so sánh `created_at` giữa `stg` và `core` cho 0 dòng lệch.
 
 ## BUG-03 – Biểu đồ xu hướng hiển thị sai trục
 - **Hiện tượng:** trục X hiện số thập phân 1, 1.2, 1.4… (ảnh `13`).
@@ -30,11 +30,3 @@ Ghi chú trung thực về commit: cả ba lỗi được phát hiện và sửa
 
 ## Lỗi đã biết, chưa sửa
 - Lần tải dashboard đầu tiên sau khi bật máy chủ mất 3,72 giây (> 3 giây của NFR4); nạp thư viện chiếm phần lớn (khoảng 5,2 giây ở một lần đo riêng).
-
-## Cách tìm commit đã sửa từng lỗi
-```
-git log --oneline -S "connect_timeout" -- src/db.py
-git log --oneline -S "parse_dates" -- src/transform/rules.py
-git log --oneline -S "category" -- dashboard/app.py
-```
-Mỗi lệnh in ra mã commit đầu tiên đưa đoạn sửa vào. Nếu hai lỗi cùng nằm trong một commit lớn thì chưa đạt yêu cầu "mỗi lỗi một commit": xem hướng dẫn trong tin nhắn.
