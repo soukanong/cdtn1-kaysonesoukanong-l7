@@ -1,12 +1,35 @@
-# Chỉ dựng PostgreSQL 16 cho dev. Pipeline và dashboard chạy bằng Python trên máy.
+# Dung toan bo he thong: PostgreSQL 16 + app (pipeline -> dashboard).
 services:
   db:
     image: postgres:16
     env_file: .env
     ports:
       - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 3s
       timeout: 3s
       retries: 20
+
+  app:
+    build: .
+    env_file: .env
+    environment:
+      DWH_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "python -m src.pipeline && streamlit run dashboard/app.py --server.address=0.0.0.0 --server.port=8501 --server.headless=true"
+    ports:
+      - "8501:8501"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+volumes:
+  pgdata:

@@ -1,0 +1,8 @@
+.venv/
+.git/
+.env
+data/customers_raw.csv
+reports/
+__pycache__/
+*.pyc
+.pytest_cache/
