@@ -9,7 +9,7 @@ Mức độ theo ba câu hỏi: (1) người dùng còn làm được việc kh�
 |---|---|---|---|---|
 | BUG-04 | Major | `requirements.txt` chưa khóa toàn bộ phiên bản bằng `==` | Nhận xét GV về BT2 (C6); phép thử máy trắng | [0e3aab5](https://github.com/soukanong/cdtn1-kaysonesoukanong-l7/commit/0e3aab5) (commit riêng) |
 | BUG-05 | Minor | `find_suspects` so khớp email có phân biệt hoa thường, trái với BR-L7-04 | Đối chiếu test TC-03 với mã nguồn (dữ liệu thử dùng cùng một chuỗi `a@x.com` nên không kiểm được "không phân biệt hoa thường"); gọi thử hàm với `a@x.com` và `A@X.COM` cho kết quả rỗng | [ac94772](https://github.com/soukanong/cdtn1-kaysonesoukanong-l7/commit/ac94772) (commit riêng) |
-| BUG-07 | Major | Thiếu `.streamlit/config.toml` với `showErrorDetails = false`; dashboard có thể hiện stack trace đầy đủ khi có lỗi | Checklist bảo mật mục 5 (`Test-Path .streamlit\config.toml` → False) | [hash-BUG-07] |
+| BUG-07 | Major | Thiếu `.streamlit/config.toml` với `showErrorDetails = false`; dashboard có thể hiện stack trace đầy đủ khi có lỗi | Checklist bảo mật mục 5 (`Test-Path .streamlit\config.toml` → False) | [b42c3c0] |
 
 > Mức độ ở trên là đề xuất theo ba câu hỏi; em đọc lại từng lý do và đổi nếu thấy không đúng.
 
@@ -44,7 +44,7 @@ Mức độ theo ba câu hỏi: (1) người dùng còn làm được việc kh�
 | 4. Cách tái lập | `docker compose stop db` → mở http://localhost:8501 → xem trang lỗi. |
 | 5. Nguyên nhân | Không có tệp `.streamlit/config.toml` trong repo, nên Streamlit dùng giá trị mặc định `client.showErrorDetails = true`. |
 | 6. Cách sửa | Tạo `.streamlit/config.toml` với `[client] showErrorDetails = false` (và `[browser] gatherUsageStats = false`); restart `app`. |
-| 7. Commit và xác nhận | [hash-BUG-07] · sau khi restart, `docker compose stop db`, mở dashboard → chỉ thấy thông báo ngắn và nút Thử lại, không có stack trace (ảnh `sec-5.png`); `docker compose start db` khôi phục. |
+| 7. Commit và xác nhận | [b42c3c0] · sau khi restart, `docker compose stop db`, mở dashboard → chỉ thấy thông báo ngắn và nút Thử lại, không có stack trace (ảnh `sec-5.png`); `docker compose start db` khôi phục. |
 
 ## B. Lỗi đã biết, chưa sửa
 - Lần tải dashboard đầu tiên sau khi bật máy chủ mất 3,72 giây (> 3 giây của NFR4). Thời gian chủ yếu là nạp thư viện (khoảng 5,2 giây ở một lần đo riêng); truy vấn cơ sở dữ liệu chỉ 0,18 giây. Mức Minor: không ảnh hưởng dữ liệu hay nghiệp vụ. Hướng xử lý: chấp nhận ở prototype; nếu làm tiếp thì tải sẵn thư viện hoặc giữ tiến trình máy chủ chạy sẵn.

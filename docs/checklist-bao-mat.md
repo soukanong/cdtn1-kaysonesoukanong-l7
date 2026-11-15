@@ -25,4 +25,4 @@ Mục 3 và 4 chưa làm: dashboard còn ghi dữ liệu (tạo hồ sơ, xác n
 ## Bug phát hiện khi chạy checklist
 
 - **BUG-05** (Minor) — `find_suspects` so khớp email có phân biệt hoa thường, trái với BR-L7-04. Đã sửa trong commit `ac94772`.
-- **BUG-07** (Major) — Thiếu `.streamlit/config.toml` với `showErrorDetails = false`; dashboard có thể hiện stack trace đầy đủ khi có lỗi. Đã sửa trong commit riêng `[hash-BUG-07]`; xem `docs/bug-log.md`.
+- **BUG-07** (Major) — Thiếu `.streamlit/config.toml` với `showErrorDetails = false`; dashboard có thể hiện stack trace đầy đủ khi có lỗi. Đã sửa trong commit riêng `b42c3c0`; xem `docs/bug-log.md`.
