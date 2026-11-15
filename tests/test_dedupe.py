@@ -13,7 +13,7 @@ def clean_df(rows):
 
 def test_DD01_trung_email_khac_hoa_thuong_la_nghi_trung():
     s = dedupe.find_suspects(clean_df([("0901111111", "a@x.com", "An", "1 A"),
-                                       ("0902222222", "a@x.com", "Bình", "2 B")]))
+                                       ("0902222222", "A@X.com", "Bình", "2 B")]))
     assert set(s["phone"]) == {"0901111111", "0902222222"} and set(s["match_rule"]) == {"EMAIL"}
 
 

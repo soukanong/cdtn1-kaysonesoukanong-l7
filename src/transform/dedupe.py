@@ -19,6 +19,7 @@ def find_suspects(clean: pd.DataFrame) -> pd.DataFrame:
         return pd.DataFrame(columns=columns)
 
     df = clean.reset_index(drop=True)
+    df["email"] = df["email"].map(lambda e: e.strip().lower() if isinstance(e, str) and e.strip() else None)
     parent = list(range(len(df)))
 
     def find(x: int) -> int:
