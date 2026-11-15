@@ -109,3 +109,28 @@
 - **Quyết định:** SỬA
 - **Lý do:** có 2.624 nhóm nghi trùng nên một bảng chung quá dài; chọn một nhóm bằng danh sách thả xuống rồi xem các hồ sơ của nhóm đó. Ô Email cần để khớp quy tắc BR-L7-04 (nghi trùng theo email).
 - **Ảnh hưởng:** wireframe Khung 3 (dashboard/app.py); không đổi dữ liệu hay quy tắc nghiệp vụ.
+
+## Phát hiện khi hoàn thiện BT2 (bổ sung)
+
+### TD-16 Kiến trúc đã hiện thực lệch thiết kế ở hai điểm
+
+- **Phản hồi của GV:** không có (em tự đối chiếu mã nguồn với sơ đồ kiến trúc BT1 khi viết báo cáo BT2).
+- **Quyết định:** GIỮ NGUYÊN mã, GHI NHẬN ngoại lệ
+- **Lý do:** (A) dashboard gọi thẳng lớp Truy cập dữ liệu (`queries`, `customer_repo`, `db`) thay vì đi qua lớp Nghiệp vụ; (B) `customer_repo` gọi `merge_rules` để chặn thao tác gộp khi không đủ quyền, tức lớp Truy cập dữ liệu phụ thuộc ngược lên lớp Nghiệp vụ. Em chấp nhận cả hai vì đây là prototype một luồng; nếu làm lại, em sẽ chuyển việc kiểm tra quyền lên lớp Nghiệp vụ.
+- **Ảnh hưởng:** sơ đồ `docs/architecture-thuc-te.png` vẽ hai ngoại lệ bằng mũi tên đỏ nét đứt; báo cáo BT2 Mục 2.
+
+## Sau phản hồi Bài tập 2 (buổi 14, ngày 05/11/2026)
+
+### TD-17 Khóa toàn bộ phiên bản trong requirements.txt
+
+- **Phản hồi của GV:** `requirements.txt` chưa khóa toàn bộ phiên bản bằng `==` (mục kiểm chứng C6 chưa đạt).
+- **Quyết định:** SỬA
+- **Lý do:** muốn người khác dựng lại đúng môi trường thì mọi thư viện phải được khóa bằng `==`; dùng `>=` hoặc bỏ trống phiên bản thì hai lần cài có thể ra hai bộ thư viện khác nhau.
+- **Ảnh hưởng:** `requirements.txt` (sinh lại bằng `pip freeze` từ môi trường đang chạy tốt); commit `0e3aab5`; ghi là BUG-04 trong `docs/bug-log.md`.
+
+### TD-18 Đóng gói pipeline và dashboard bằng Docker Compose
+
+- **Phản hồi của GV:** Docker mới chỉ dựng PostgreSQL, chưa đóng gói pipeline và dashboard.
+- **Quyết định:** SỬA
+- **Lý do:** Bài tập 3 yêu cầu hệ thống dựng lại được từ thư mục trống bằng không quá hai lệnh; trước đây phải cài Python và chạy từng bước bằng tay. Em dùng một dịch vụ `app` chạy pipeline trước rồi mở dashboard (`sh -c "python -m src.pipeline && streamlit run ..."`) thay vì tách thành hai dịch vụ, để mọi dịch vụ đều có healthcheck và `docker compose ps` chỉ có trạng thái healthy.
+- **Ảnh hưởng:** `Dockerfile`, `docker-compose.yml` (hai dịch vụ: `db` PostgreSQL 16 và `app`), `.dockerignore`, `README.md` (hai lệnh chạy); commit `051eedb`. Trong container, biến `DWH_URL` được compose ghi đè thành host `db`, cổng 5432; tệp `customers_raw.csv` bị loại khỏi image nên `app` nạp dữ liệu mẫu `data/mau/customers_raw_sample.csv` (400 dòng) khi khởi động.
